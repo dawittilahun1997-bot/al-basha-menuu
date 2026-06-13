@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#0a0800"/>
+<title>Al Basha Al Mendi Restaurant</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Al Basha"/>
+<meta name="application-name" content="Al Basha Menu"/>
+<meta name="description" content="Al Basha Al Mendi Restaurant — Digital Menu"/>
+<link rel="manifest" id="pwa-manifest"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Tajawal:wght@300;400;500;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+:root{
+  --gold:#C9A84C;--gold2:#E8C97A;--gold3:rgba(201,168,76,.18);
+  --gold-shine:linear-gradient(135deg,#b8860b,#f0d060,#b8860b);
+  --bg:#0a0800;--bg2:#110e00;--bg3:#1a1500;--bg4:#221c00;
+  --text:#f2e8c9;--muted:#7a6a40;--red:#c0392b;
+  --border:rgba(201,168,76,.22);--border2:rgba(201,168,76,.1);
+  --radius:18px;--radius-sm:10px;
+  --shadow:0 8px 40px rgba(0,0,0,.7);
+  --font-display:'Cormorant Garamond',serif;
+  --font-body:'Tajawal',sans-serif;
+  --font-ar:'Amiri',serif;
+}
+body.light{
+  --bg:#faf6ec;--bg2:#fff8e7;--bg3:#f5edcf;--bg4:#eee4c0;
+  --text:#2a1f00;--muted:#8a7040;
+  --border:rgba(150,110,20,.3);--border2:rgba(150,110,20,.12);
+}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-body);}
+
+/* HEADER */
+#hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;height:68px;
+  background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;position:relative;z-index:100;
+}
+#hdr::after{
+  content:'';position:absolute;bottom:0;left:8%;right:8%;height:1px;
+  background:var(--gold-shine);background-size:200% auto;
+  animation:shimmer 4s linear infinite;opacity:.45;
+}
+.hlogo-wrap{display:flex;flex-direction:row;align-items:center;gap:12px;cursor:pointer;-webkit-user-select:none;user-select:none;position:relative;}
+.hlogo-wrap:active{opacity:.75;}
+.hlogo-img{
+  width:46px;height:46px;border-radius:50%;object-fit:cover;flex-shrink:0;
+  border:2px solid var(--gold);
+  box-shadow:0 0 14px rgba(201,168,76,.35),0 2px 8px rgba(0,0,0,.6);
+}
+.hlogo-text{display:flex;flex-direction:column;justify-content:center;gap:1px;}
+.hlogo{
+  font-family:var(--font-display);font-size:20px;font-weight:700;
+  color:var(--gold2);letter-spacing:3.5px;line-height:1;
+  text-shadow:0 1px 10px rgba(201,168,76,.4);
+}
+body.light .hlogo{color:#6a4a00;}
+.hlogo-ar{font-family:var(--font-ar);font-size:12px;color:var(--muted);letter-spacing:1px;}
+body.light .hlogo-ar{color:var(--muted);}
+.hright{display:flex;align-items:center;gap:8px;}
+
+/* Language */
+.glob-btn{
+  background:var(--gold3);border:1px solid var(--border);
+  color:var(--gold2);padding:6px 14px;font-size:12px;cursor:pointer;
+  border-radius:20px;font-family:var(--font-body);
+  display:flex;align-items:center;gap:5px;transition:.25s;letter-spacing:.5px;
+}
+.glob-btn:hover{background:rgba(201,168,76,.28);border-color:var(--gold);}
+.lang-drop{
+  display:none;position:absolute;top:calc(100% + 8px);right:18px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;min-width:190px;z-index:400;
+  box-shadow:0 16px 50px rgba(0,0,0,.85);
+}
+.lang-drop.open{display:block;animation:fadeUp .18s ease;}
+.lang-drop button{
+  display:block;width:100%;padding:13px 18px;background:transparent;border:none;
+  border-bottom:1px solid var(--border2);color:var(--text);
+  font-family:var(--font-body);font-size:14px;cursor:pointer;text-align:left;transition:.15s;
+}
+.lang-drop button:last-child{border-bottom:none;}
+.lang-drop button:hover,.lang-drop button.cur{background:var(--gold3);color:var(--gold2);}
+
+/* Theme */
+.theme-btn{
+  background:var(--gold3);border:1px solid var(--border);
+  font-size:15px;width:36px;height:36px;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.theme-btn:hover{background:rgba(201,168,76,.28);}
+
+/* CATEGORY SCREEN */
+#cat-screen{flex:1;overflow-y:auto;padding:0 14px 20px;}
+#cat-screen::-webkit-scrollbar{width:3px;}
+#cat-screen::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.cat-label{
+  font-family:var(--font-display);font-size:12px;color:var(--muted);
+  letter-spacing:5px;text-transform:uppercase;text-align:center;
+  margin-bottom:14px;padding-top:10px;
+}
+#cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.cat-card{
+  background:var(--bg2);border-radius:var(--radius);
+  display:flex;flex-direction:column;align-items:stretch;cursor:pointer;
+  transition:transform .18s ease,box-shadow .18s ease;
+  -webkit-user-select:none;position:relative;overflow:hidden;
+  min-height:130px;border:1px solid var(--border2);
+}
+.cat-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(201,168,76,.07) 0%,transparent 60%);
+  z-index:0;pointer-events:none;
+}
+.cat-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--gold-shine);background-size:200% auto;
+  animation:shimmer 5s linear infinite;opacity:0;transition:.2s;
+}
+.cat-card:hover::after{opacity:.7;}
+.cat-card:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 20px rgba(201,168,76,.1);}
+.cat-card:active{transform:scale(.97);}
+.cat-top-line{
+  width:100%;flex:1;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:14px 16px 8px;position:relative;z-index:1;
+}
+.cat-emoji-large{font-size:36px;margin-bottom:6px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));}
+.cat-top-name{
+  font-family:var(--font-display);font-size:18px;font-weight:600;
+  color:#fff;line-height:1.2;text-shadow:0 1px 8px rgba(0,0,0,.7);
+}
+.cat-em{display:none;}
+.cat-name{display:none;}
+.cat-count{
+  font-size:10px;color:rgba(255,255,255,.38);
+  padding:0 16px 14px;letter-spacing:2.5px;text-transform:uppercase;
+  position:relative;z-index:1;
+}
+body.light .cat-card{background:#fff8e7;border-color:rgba(180,140,20,.2);}
+body.light .cat-top-name{color:#2a1800;text-shadow:none;}
+body.light .cat-count{color:rgba(42,24,0,.38);}
+body.light .cat-emoji-large{filter:none;}
+
+/* SLIDESHOW */
+#sw{position:fixed;top:68px;left:0;right:0;bottom:0;background:#050400;display:none;touch-action:none;z-index:200;overflow:hidden;}
+#sw.show{display:block;}
+#slides-container{position:absolute;inset:0;display:flex;will-change:transform;}
+.slide{
+  position:relative;min-width:100%;width:100%;height:100%;
+  flex-shrink:0;overflow:hidden;
+  background:#050400;
+}
+.s-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,#1c1600 0%,#050400 70%);}
+.s-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;background:#050400;}
+.s-photo-ov{display:none;}
+.s-emoji{
+  position:absolute;top:0;left:0;right:0;bottom:40%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:120px;z-index:2;
+  filter:drop-shadow(0 4px 24px rgba(201,168,76,.25));
+}
+.s-ring{display:none;}
+.s-overlay{
+  position:absolute;bottom:0;left:0;right:0;height:70%;
+  background:linear-gradient(to top,rgba(5,4,0,1) 0%,rgba(5,4,0,.97) 20%,rgba(5,4,0,.8) 40%,rgba(5,4,0,.3) 65%,transparent 100%);
+  z-index:3;
+}
+.s-overlay.has-photo{
+  height:70%;
+  background:linear-gradient(to top,rgba(5,4,0,1) 0%,rgba(5,4,0,.97) 20%,rgba(5,4,0,.8) 40%,rgba(5,4,0,.3) 65%,transparent 100%);
+}
+.s-info{position:absolute;bottom:0;left:0;right:0;padding:0 24px 60px 24px;z-index:5;}
+.s-divider{display:none;}
+.s-cat-tag{
+  display:inline-block;font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);border:1px solid rgba(201,168,76,.5);border-radius:20px;
+  padding:3px 12px;margin-bottom:10px;font-family:var(--font-body);
+}
+.s-name{
+  font-family:var(--font-display);font-size:34px;font-weight:700;
+  color:#fff;margin-bottom:3px;line-height:1.1;
+  text-shadow:0 2px 14px rgba(0,0,0,.9);
+}
+.s-native{font-size:15px;color:var(--gold);margin-bottom:8px;font-family:var(--font-ar);}
+.s-desc{font-size:13px;color:rgba(255,255,255,.48);margin-bottom:16px;line-height:1.6;max-width:380px;}
+.s-price-row{display:flex;align-items:baseline;gap:8px;}
+.s-price{
+  font-family:var(--font-display);font-size:38px;color:var(--gold2);font-weight:700;line-height:1;
+  text-shadow:0 1px 12px rgba(201,168,76,.45);
+}
+.s-price-lbl{font-size:12px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;}
+.s-hint{display:none;}
+
+/* Dots */
+#dots{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;pointer-events:none;}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(201,168,76,.2);transition:.3s;flex-shrink:0;}
+.dot.on{background:var(--gold);width:22px;border-radius:3px;box-shadow:0 0 8px rgba(201,168,76,.5);}
+
+/* Counter */
+#big-counter{
+  position:absolute;top:18px;right:18px;
+  background:rgba(0,0,0,.55);border:1px solid var(--border);
+  color:var(--gold2);font-family:var(--font-display);font-size:13px;font-weight:700;
+  padding:5px 14px;border-radius:20px;z-index:50;letter-spacing:1px;
+}
+
+/* Back button */
+#slide-hdr{position:fixed;bottom:28px;right:28px;height:auto;width:auto;background:transparent;border:none;padding:0;display:none;align-items:center;z-index:9999;}
+.back-btn{
+  background:linear-gradient(135deg,#b8860b,#f0d060);
+  border:none;color:#0a0800;width:54px;height:54px;font-size:22px;font-weight:900;
+  cursor:pointer;border-radius:50%;
+  box-shadow:0 4px 20px rgba(201,168,76,.45),0 2px 10px rgba(0,0,0,.7);
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.back-btn:hover{transform:scale(1.06);box-shadow:0 6px 28px rgba(201,168,76,.6);}
+#slide-title{font-family:var(--font-display);font-size:15px;color:var(--text);flex:1;}
+
+/* PIN */
+#pin-ov{position:fixed;inset:0;background:rgba(5,4,0,.93);backdrop-filter:blur(8px);z-index:600;display:none;align-items:center;justify-content:center;}
+#pin-ov.show{display:flex;}
+.pin-box{
+  background:var(--bg2);border:1px solid var(--border);border-radius:20px;
+  padding:36px;width:310px;text-align:center;
+  box-shadow:0 12px 50px rgba(0,0,0,.8);
+}
+.pin-title{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--gold2);margin-bottom:4px;}
+.pin-sub{font-size:13px;color:var(--muted);margin-bottom:22px;}
+.pin-disp{font-size:32px;letter-spacing:18px;color:var(--gold);height:48px;margin-bottom:22px;text-shadow:0 0 12px rgba(201,168,76,.4);}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.pk{
+  background:var(--bg3);border:1px solid var(--border2);color:var(--text);
+  font-size:22px;padding:15px;cursor:pointer;border-radius:10px;
+  font-family:var(--font-display);transition:.15s;
+}
+.pk:hover{border-color:var(--gold);color:var(--gold);background:var(--gold3);}
+.pk:active{transform:scale(.94);}
+.pin-err{color:var(--red);font-size:13px;margin-top:12px;height:18px;}
+
+/* ══ ADMIN NEW DESIGN ══ */
+#adm-ov{
+  position:fixed;inset:0;background:var(--bg);
+  z-index:500;display:none;flex-direction:column;overflow:hidden;
+}
+#adm-ov.show{display:flex;}
+
+/* Admin top bar */
+.adm-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;height:52px;background:var(--bg2);
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.adm-topbar-title{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--text);}
+.adm-topbar-right{display:flex;align-items:center;gap:8px;}
+
+/* Admin body scrollable */
+.adm-body{flex:1;overflow-y:auto;padding:14px;}
+.adm-body::-webkit-scrollbar{width:4px;}
+.adm-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* Action buttons grid */
+.adm-actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.adm-action-btn{
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:12px;padding:12px 10px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  cursor:pointer;transition:.18s;color:var(--text);font-family:var(--font-body);
+}
+.adm-action-btn:hover{border-color:var(--border);background:var(--bg4);}
+.adm-action-btn.primary{background:#8B1A1A;border-color:#c0392b;color:#fff;}
+.adm-action-btn.primary:hover{background:#a01e1e;}
+.adm-action-btn .aab-icon{font-size:18px;}
+.adm-action-btn .aab-label{font-size:12px;font-weight:600;}
+
+/* Item list */
+.adm-list-item{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
+  padding:8px 10px;margin-bottom:7px;
+  display:flex;align-items:center;gap:10px;transition:.15s;
+}
+.adm-list-item:hover{border-color:var(--border);background:var(--bg3);}
+.adm-list-item.drag-over{border-color:var(--gold);background:rgba(201,168,76,.08);transform:scale(1.01);}
+.adm-li-thumb{
+  width:42px;height:42px;min-width:42px;border-radius:8px;
+  background:var(--bg3);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.adm-li-thumb img{width:100%;height:100%;object-fit:cover;}
+.adm-li-info{flex:1;min-width:0;}
+.adm-li-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.adm-li-cat{font-size:11px;color:var(--muted);margin-top:1px;}
+.adm-li-price{font-size:12px;color:#e8a020;font-weight:700;margin-top:1px;}
+.adm-li-drag{color:var(--muted);font-size:15px;cursor:grab;padding:0 2px;}
+.adm-li-actions{display:flex;gap:2px;}
+.adm-li-edit{background:transparent;border:none;color:var(--muted);font-size:15px;cursor:pointer;padding:5px;border-radius:7px;transition:.15s;}
+.adm-li-edit:hover{color:var(--gold);background:rgba(201,168,76,.1);}
+.adm-li-del{background:transparent;border:none;color:var(--red);font-size:15px;cursor:pointer;padding:5px;border-radius:7px;transition:.15s;}
+.adm-li-del:hover{background:rgba(192,57,43,.15);}
+
+/* Full-page form (Add/Edit item) */
+#adm-form-page{
+  position:fixed;inset:0;background:var(--bg);z-index:510;
+  display:none;flex-direction:column;overflow:hidden;
+}
+#adm-form-page.show{display:flex;}
+.adm-form-topbar{
+  display:flex;align-items:center;gap:14px;
+  padding:0 16px;height:64px;background:var(--bg2);
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.adm-form-back{
+  background:transparent;border:none;color:var(--text);
+  font-size:20px;cursor:pointer;padding:8px;border-radius:8px;
+  display:flex;align-items:center;gap:6px;font-family:var(--font-body);font-size:15px;
+}
+.adm-form-back:hover{color:var(--gold);}
+.adm-form-title{font-size:18px;font-weight:600;color:var(--text);font-family:var(--font-body);}
+.adm-form-body{flex:1;overflow-y:auto;padding:20px;}
+.adm-form-body::-webkit-scrollbar{width:4px;}
+.adm-form-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* Photo picker */
+.adm-photo-picker{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:14px;
+  overflow:hidden;margin-bottom:20px;
+}
+.adm-photo-preview{
+  width:100%;height:200px;display:flex;align-items:center;justify-content:center;
+  background:var(--bg3);color:var(--muted);font-size:14px;flex-direction:column;gap:8px;position:relative;
+}
+.adm-photo-preview img{width:100%;height:100%;object-fit:cover;display:block;}
+.adm-photo-preview .ph-icon{font-size:36px;opacity:.4;}
+.adm-photo-btns{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.adm-photo-btn{
+  background:transparent;border:none;border-top:1px solid var(--border2);
+  color:var(--gold);padding:14px;font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--font-body);transition:.15s;
+}
+.adm-photo-btn:first-child{border-right:1px solid var(--border2);}
+.adm-photo-btn:hover{background:var(--gold3);}
+
+/* Category chips */
+.adm-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.adm-chip{
+  padding:8px 14px;border-radius:20px;border:1px solid var(--border2);
+  background:var(--bg3);color:var(--text);font-size:13px;cursor:pointer;
+  font-family:var(--font-body);transition:.15s;display:flex;align-items:center;gap:6px;
+}
+.adm-chip:hover{border-color:var(--border);}
+.adm-chip.active{background:#c0392b;border-color:#c0392b;color:#fff;}
+
+/* Form fields */
+.adm-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.adm-input{
+  background:var(--bg2);border:1px solid var(--border2);color:var(--text);
+  padding:14px 16px;font-family:var(--font-body);font-size:15px;
+  border-radius:12px;outline:none;width:100%;transition:.15s;
+  margin-bottom:16px;
+}
+.adm-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1);}
+textarea.adm-input{min-height:90px;resize:vertical;}
+
+/* Save button */
+.adm-save-big{
+  background:#c0392b;color:#fff;border:none;
+  width:100%;padding:16px;border-radius:14px;
+  font-size:16px;font-weight:700;font-family:var(--font-body);
+  cursor:pointer;transition:.2s;margin-top:8px;margin-bottom:24px;
+}
+.adm-save-big:hover{background:#a01e1e;}
+
+/* Category modal */
+#cat-modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);
+  z-index:520;display:none;align-items:flex-end;justify-content:center;
+}
+#cat-modal.show{display:flex;}
+#cat-modal-panel{
+  background:var(--bg2);border-radius:20px 20px 0 0;
+  width:100%;max-width:640px;max-height:85vh;
+  display:flex;flex-direction:column;overflow:hidden;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.cat-modal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 20px 16px;border-bottom:1px solid var(--border2);flex-shrink:0;
+}
+.cat-modal-title{font-size:18px;font-weight:700;color:var(--text);font-family:var(--font-body);}
+.cat-modal-close{background:transparent;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:4px 8px;}
+.cat-modal-body{flex:1;overflow-y:auto;padding:16px 20px;}
+.cat-modal-body::-webkit-scrollbar{width:4px;}
+.cat-modal-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* Cat list row */
+.cat-row{
+  display:flex;align-items:center;gap:12px;padding:12px 0;
+  border-bottom:1px solid var(--border2);
+}
+.cat-row:last-child{border-bottom:none;}
+.cat-row.drag-over{border-bottom:2px solid var(--gold);background:rgba(201,168,76,.07);transform:scale(1.01);}
+.cat-row-emoji{
+  width:44px;height:44px;border-radius:10px;background:var(--bg3);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  overflow:hidden;flex-shrink:0;
+}
+.cat-row-emoji img{width:100%;height:100%;object-fit:cover;}
+.cat-row-info{flex:1;min-width:0;}
+.cat-row-name{font-size:15px;font-weight:600;color:var(--text);}
+.cat-row-tr{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cat-row-actions{display:flex;gap:8px;}
+.cat-row-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--muted);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.cat-row-btn:hover{border-color:var(--gold);color:var(--gold);}
+.cat-row-btn.del:hover{border-color:var(--red);color:var(--red);}
+
+/* Add cat form inside modal */
+.add-cat-form{padding:16px 0;}
+.add-cat-title{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.add-cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.adm-input-sm{
+  background:var(--bg3);border:1px solid var(--border2);color:var(--text);
+  padding:11px 14px;font-family:var(--font-body);font-size:14px;
+  border-radius:10px;outline:none;width:100%;transition:.15s;
+}
+.adm-input-sm:focus{border-color:var(--gold);}
+.add-cat-btn{
+  background:#c0392b;color:#fff;border:none;
+  width:100%;padding:13px;border-radius:12px;
+  font-size:14px;font-weight:700;font-family:var(--font-body);cursor:pointer;
+}
+
+
+.fi{
+  background:var(--bg);border:1px solid var(--border2);color:var(--text);
+  padding:10px 13px;font-family:var(--font-body);font-size:14px;
+  border-radius:8px;outline:none;width:100%;transition:.15s;
+}
+.fi:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1);}
+.fs{background:var(--bg);border:1px solid var(--border2);color:var(--text);padding:10px 13px;font-family:var(--font-body);font-size:14px;border-radius:8px;outline:none;width:100%;}
+.bg{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a0800;border:none;padding:10px 22px;font-family:var(--font-body);font-size:14px;font-weight:700;cursor:pointer;border-radius:8px;transition:.2s;}
+.bg:hover{box-shadow:0 4px 16px rgba(201,168,76,.35);}
+.bo{background:transparent;color:var(--muted);border:1px solid var(--border2);padding:8px 13px;font-family:var(--font-body);font-size:12px;cursor:pointer;border-radius:7px;transition:.15s;}
+.bo:hover{border-color:var(--gold);color:var(--gold);}
+.ord-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--muted);width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;padding:0;transition:.15s;}
+.ord-btn:disabled{opacity:.2;cursor:not-allowed;}
+.ord-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold);}
+.adm-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:120px;}
+.adm-field label{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.adm-save-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a0800;border:none;padding:9px 20px;border-radius:8px;font-family:var(--font-body);font-size:13px;font-weight:700;cursor:pointer;transition:.2s;}
+.adm-del-btn{background:transparent;border:1px solid var(--red);color:var(--red);padding:9px 20px;border-radius:8px;font-family:var(--font-body);font-size:13px;cursor:pointer;transition:.15s;}
+.adm-del-btn:hover{background:var(--red);color:#fff;}
+
+/* Light mode */
+body.light #hdr{background:linear-gradient(180deg,#fffdf5 0%,#faf6ec 100%);border-bottom-color:rgba(180,140,20,.25);}
+body.light .cat-card{background:#fff8e7;}
+body.light .cat-name{color:#2a1800;}
+body.light #cat-screen{background:#faf6ec;}
+body.light .s-bg{background:radial-gradient(ellipse at 50% 30%,#1c1600 0%,#050400 70%);}
+body.light #slide-title{color:var(--text);}
+body.light .lang-drop{background:#fffdf5;border-color:rgba(180,140,20,.3);}
+body.light .lang-drop button{color:#2a1800;border-bottom-color:rgba(180,140,20,.12);}
+body.light .lang-drop button:hover{background:#fff8e7;color:#8a6010;}
+body.light .pin-box,body.light #adm-panel{background:#fffdf5;}
+body.light .aph{background:linear-gradient(135deg,#fff8e7,#fffdf5);}
+body.light .fi,body.light .fs{background:#fff8e7;color:#2a1800;border-color:rgba(180,140,20,.2);}
+body.light .item-card{background:#fff8e7;border-color:rgba(180,140,20,.15);}
+body.light .irn{color:#2a1800;}
+body.light #big-counter{background:rgba(0,0,0,.65);}
+body.light .adm-card{background:#fff8e7;}
+body.light .adm-photo-box{background:#faf6ec;}
+
+/* Toast */
+#toast{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(16px);
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#0a0800;padding:10px 26px;border-radius:8px;font-size:14px;font-weight:700;
+  opacity:0;transition:.3s;z-index:1000;pointer-events:none;
+  box-shadow:0 4px 20px rgba(201,168,76,.4);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+[dir="rtl"] .s-info{text-align:right;}
+[dir="rtl"] .lang-drop button{text-align:right;}
+
+
+/* ══ COMPACT ITEM LIST ══ */
+.il-row{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:12px;padding:10px 12px;margin-bottom:8px;
+  transition:.15s;
+}
+.il-row:hover{border-color:var(--border);background:var(--bg4);}
+.il-drag{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:26px;}
+.il-thumb{
+  width:52px;height:52px;min-width:52px;border-radius:10px;
+  background:var(--bg2);border:1px solid var(--border2);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.il-info{flex:1;min-width:0;}
+.il-name{font-family:var(--font-display);font-size:15px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.il-cat{font-size:11px;color:var(--muted);margin-top:1px;}
+.il-price{font-size:13px;color:var(--gold);font-weight:700;margin-top:3px;}
+.il-actions{display:flex;gap:8px;flex-shrink:0;}
+.il-edit-btn{
+  background:var(--gold3);border:1px solid var(--border);
+  color:var(--gold2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;
+  transition:.15s;
+}
+.il-edit-btn:hover{background:rgba(201,168,76,.3);border-color:var(--gold);}
+.il-del-btn{
+  background:transparent;border:1px solid rgba(192,57,43,.4);
+  color:var(--red);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;
+  transition:.15s;
+}
+.il-del-btn:hover{background:var(--red);color:#fff;border-color:var(--red);}
+
+/* ══ EDIT MODAL ══ */
+#edit-modal{
+  display:none;position:fixed;inset:0;
+  background:rgba(5,4,0,.92);backdrop-filter:blur(8px);
+  z-index:700;align-items:center;justify-content:center;padding:16px;
+  overflow-y:auto;
+}
+#edit-modal.show{display:flex;}
+#edit-modal-panel{
+  background:var(--bg2);border:1px solid var(--border);border-radius:18px;
+  width:100%;max-width:640px;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.9);
+  animation:fadeUp .2s ease;
+}
+.em-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;background:linear-gradient(135deg,var(--bg3),var(--bg2));
+  border-bottom:1px solid var(--border);position:relative;overflow:hidden;
+}
+.em-header::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:var(--gold-shine);background-size:200% auto;animation:shimmer 4s linear infinite;opacity:.4;
+}
+.em-title{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--gold2);}
+.em-close{
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;transition:.15s;
+}
+.em-close:hover{border-color:var(--red);color:var(--red);}
+#edit-modal-body{padding:20px;display:flex;flex-direction:column;gap:16px;}
+.em-top{display:flex;gap:14px;align-items:flex-start;}
+.em-photo{
+  width:100px;height:100px;min-width:100px;border-radius:12px;
+  background:var(--bg3);border:1px dashed var(--border);
+  cursor:pointer;overflow:hidden;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  transition:.15s;text-align:center;
+}
+.em-photo:hover{border-color:var(--gold);}
+.em-photo-del{
+  position:absolute;top:4px;right:4px;background:var(--red);
+  color:#fff;border:none;border-radius:50%;width:22px;height:22px;
+  font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  z-index:2;
+}
+.em-right{flex:1;display:flex;flex-direction:column;gap:10px;}
+.em-langs{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.em-footer{display:flex;gap:10px;padding-top:4px;}
+body.light #edit-modal-panel{background:#fffdf5;}
+body.light .em-header{background:linear-gradient(135deg,#fff8e7,#fffdf5);}
+body.light .il-row{background:#fff8e7;border-color:rgba(180,140,20,.15);}
+body.light .il-row:hover{background:#fff4d6;}
+body.light .em-photo{background:#faf6ec;}
+
+/* ══ SPLASH SCREEN ══ */
+#splash{
+  position:fixed;inset:0;z-index:9000;
+  background:radial-gradient(ellipse at 50% 40%, #1e0a00 0%, #0a0500 60%, #000 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;user-select:none;-webkit-user-select:none;
+  transition:opacity .7s ease, transform .7s ease;
+}
+#splash.hiding{opacity:0;transform:scale(1.04);}
+#splash.gone{display:none;}
+
+#splash-logo{
+  width:180px;height:180px;border-radius:50%;object-fit:cover;
+  border:3px solid var(--gold);
+  box-shadow:0 0 60px rgba(201,168,76,.5), 0 0 120px rgba(201,168,76,.2);
+  animation:splashPulse 2.5s ease-in-out infinite;
+  margin-bottom:28px;
+}
+@keyframes splashPulse{
+  0%,100%{box-shadow:0 0 40px rgba(201,168,76,.4), 0 0 80px rgba(201,168,76,.15);}
+  50%{box-shadow:0 0 70px rgba(201,168,76,.7), 0 0 140px rgba(201,168,76,.3);}
+}
+#splash-name{
+  font-family:var(--font-display);font-size:42px;font-weight:700;
+  color:var(--gold2);letter-spacing:6px;text-align:center;
+  text-shadow:0 2px 20px rgba(201,168,76,.5);
+  margin-bottom:6px;
+}
+#splash-sub{
+  font-family:var(--font-ar);font-size:16px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:32px;text-align:center;
+}
+#splash-divider{
+  width:120px;height:1px;margin-bottom:28px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+#splash-welcome-en{
+  font-family:var(--font-display);font-size:22px;font-style:italic;
+  color:#fff;text-align:center;margin-bottom:8px;
+  text-shadow:0 1px 10px rgba(0,0,0,.8);
+}
+#splash-welcome-ar{
+  font-family:var(--font-ar);font-size:22px;color:var(--gold);
+  text-align:center;margin-bottom:48px;
+  text-shadow:0 1px 10px rgba(201,168,76,.3);
+  direction:rtl;
+}
+#splash-tap{
+  font-size:12px;color:rgba(255,255,255,.3);letter-spacing:4px;
+  text-transform:uppercase;font-family:var(--font-body);
+  animation:splashBlink 2s ease-in-out infinite;
+}
+@keyframes splashBlink{0%,100%{opacity:.3;}50%{opacity:.7;}}
+
+/* ══ CATEGORY JUMP ══ */
+#cat-jump-btn{
+  position:fixed;bottom:22px;right:16px;z-index:9999;
+  background:linear-gradient(135deg,#b8860b,#f0d060);
+  border:none;color:#0a0800;width:40px;height:40px;
+  border-radius:50%;font-size:15px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(201,168,76,.45),0 2px 8px rgba(0,0,0,.7);
+  display:none;align-items:center;justify-content:center;transition:.2s;
+}
+#cat-jump-btn:hover{transform:scale(1.06);}
+#cat-drawer{
+  display:none;position:fixed;bottom:70px;right:16px;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:16px;z-index:9998;
+  padding:12px;min-width:180px;
+  box-shadow:0 12px 40px rgba(0,0,0,.85);
+  animation:fadeUp .18s ease;
+}
+#cat-drawer.open{display:block;}
+.cj-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:10px;cursor:pointer;
+  font-family:var(--font-body);font-size:14px;color:var(--text);
+  transition:.15s;border:none;background:transparent;width:100%;text-align:left;
+}
+.cj-item:hover{background:var(--gold3);color:var(--gold2);}
+.cj-item.active{background:var(--gold3);color:var(--gold2);font-weight:700;}
+.cj-all{border-bottom:1px solid var(--border2);margin-bottom:6px;padding-bottom:12px;}
+</style>
+</head>
+<body>
+<!-- SPLASH SCREEN -->
+<div id="splash" onclick="closeSplash()">
+  <img id="splash-logo" src="data:image/jpeg;base64,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" alt="Al Basha"/>
+  <div id="splash-name">AL BASHA</div>
+  <div id="splash-sub">Al Mendi Restaurant · مطعم المندي</div>
+  <div id="splash-divider"></div>
+  <div id="splash-welcome-en">Welcome to Al Basha Al Mendi Restaurant</div>
+  <div id="splash-welcome-ar">أهلاً وسهلاً بكم في مطعم الباشا المندي</div>
+  <div id="splash-tap">Tap anywhere to enter</div>
+</div>
+
+<div id="app" style="display:flex;flex-direction:column;height:100%;">
+
+  <!-- HEADER -->
+  <div id="hdr">
+    <div class="hlogo-wrap" id="logo-tap">
+      <img src="data:image/jpeg;base64,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" alt="Al Basha Logo" class="hlogo-img"/>
+      <div class="hlogo-text">
+        <div class="hlogo">AL BASHA</div>
+        <div class="hlogo-ar">Al Mendi Restaurant</div>
+      </div>
+    </div>
+    <div class="hright">
+      <div style="position:relative;">
+        <button class="glob-btn" id="glob-btn" onclick="toggleLang()">🌐 <span id="lang-lbl">EN</span> ▾</button>
+        <div class="lang-drop" id="lang-drop">
+          <button onclick="setLang('en')" data-l="en">🇬🇧 English</button>
+          <button onclick="setLang('am')" data-l="am">🇪🇹 አማርኛ</button>
+          <button onclick="setLang('om')" data-l="om">🇪🇹 Afaan Oromoo</button>
+          <button onclick="setLang('ar')" data-l="ar">🇸🇦 العربية</button>
+          <button onclick="setLang('so')" data-l="so">🇸🇴 Soomaali</button>
+        </div>
+      </div>
+      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">☀️</button>
+      <span id="sync-status" style="font-size:10px;letter-spacing:.5px;color:#e8a020;padding:0 4px;">⏳ Syncing…</span>
+    </div>
+  </div>
+
+  <!-- CATEGORY GRID (hidden — kept for admin JS compatibility) -->
+  <div id="cat-screen" style="display:none;">
+    <div class="cat-label" id="cat-label">Select Category</div>
+    <div id="cat-grid"></div>
+  </div>
+
+  <!-- SLIDESHOW -->
+  <div id="sw">
+    <div id="slides-container"></div>
+    <div id="dots"></div>
+    <div id="big-counter"></div>
+  </div>
+
+</div>
+
+<!-- BACK BAR fixed above everything -->
+<div id="slide-hdr">
+  <button class="back-btn" onclick="goBack()">←</button>
+</div>
+
+<!-- CATEGORY JUMP -->
+<button id="cat-jump-btn" onclick="toggleCatDrawer()">☰</button>
+<div id="cat-drawer"></div>
+
+<!-- PIN -->
+<div id="pin-ov">
+  <div class="pin-box">
+    <div class="pin-title">Admin Access</div>
+    <div class="pin-sub">Enter 4-digit PIN</div>
+    <div class="pin-disp" id="pin-disp">○○○○</div>
+    <div class="pin-grid">
+      <button class="pk" onclick="pk('1')">1</button><button class="pk" onclick="pk('2')">2</button><button class="pk" onclick="pk('3')">3</button>
+      <button class="pk" onclick="pk('4')">4</button><button class="pk" onclick="pk('5')">5</button><button class="pk" onclick="pk('6')">6</button>
+      <button class="pk" onclick="pk('7')">7</button><button class="pk" onclick="pk('8')">8</button><button class="pk" onclick="pk('9')">9</button>
+      <button class="pk" onclick="pk('c')" style="font-size:13px;">CLR</button>
+      <button class="pk" onclick="pk('0')">0</button>
+      <button class="pk" onclick="pk('ok')" style="color:var(--gold);font-size:13px;">OK</button>
+    </div>
+    <div class="pin-err" id="pin-err"></div>
+    <button class="bo" style="margin-top:14px;width:100%;" onclick="closePin()">Cancel</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adm-ov">
+
+  <!-- Main admin screen -->
+  <div id="adm-main-screen" style="display:flex;flex-direction:column;height:100%;">
+    <div class="adm-topbar">
+      <div class="adm-topbar-title">Admin Panel</div>
+      <div class="adm-topbar-right">
+        <button class="theme-btn" id="adm-theme-btn" onclick="toggleTheme()" style="background:var(--bg3);border:1px solid var(--border2);width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;">☀️</button>
+        <button onclick="closeAdmin()" style="background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 8px;">✕</button>
+      </div>
+    </div>
+    <div class="adm-body">
+      <!-- Firebase Setup Banner (shown when using demo config) -->
+      <div id="fb-setup-banner" style="background:rgba(201,168,76,.12);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;line-height:1.7;color:var(--gold2);display:none;">
+        <strong>🔥 Firebase Setup Required</strong><br>
+        To enable real-time sync across devices:<br>
+        1. Create a project at <a href="https://console.firebase.google.com" target="_blank" style="color:var(--gold);">console.firebase.google.com</a><br>
+        2. Enable Firestore → Start in <strong>test mode</strong><br>
+        3. Replace the <code>firebaseConfig</code> values at the top of this HTML file<br>
+        4. Re-host or re-serve the file
+        <br><br>
+        <em>Until then, changes save locally only (no cross-device sync).</em>
+      </div>
+      <!-- Action cards -->
+      <div class="adm-actions-grid">
+        <button class="adm-action-btn primary" onclick="openAddItem()">
+          <span class="aab-icon">＋</span>
+          <span class="aab-label">Add Item</span>
+        </button>
+        <button class="adm-action-btn" onclick="openCatModal()">
+          <span class="aab-icon">≡</span>
+          <span class="aab-label">Categories</span>
+        </button>
+      </div>
+      <!-- Item list -->
+      <div id="adm-item-list"></div>
+    </div>
+  </div>
+
+  <!-- Add / Edit Item full-page -->
+  <div id="adm-form-page">
+    <div class="adm-form-topbar">
+      <button class="adm-form-back" onclick="closeFormPage()">← <span id="adm-form-title-text">Add Item</span></button>
+    </div>
+    <div class="adm-form-body" id="adm-form-body"></div>
+  </div>
+
+</div>
+
+<!-- Categories modal -->
+<div id="cat-modal">
+  <div id="cat-modal-panel">
+    <div class="cat-modal-header">
+      <div class="cat-modal-title">Manage Categories</div>
+      <button class="cat-modal-close" onclick="closeCatModal()">✕</button>
+    </div>
+    <div class="cat-modal-body" id="cat-modal-body"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, onSnapshot, setDoc, getDoc }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ── FIREBASE CONFIG ────────────────────────────────
+// Replace these values with your own Firebase project config
+const firebaseConfig = {
+  apiKey: "AIzaSyDemo-AlBashaMenuApp-Replace-Me",
+  authDomain: "albasha-menu.firebaseapp.com",
+  projectId: "albasha-menu",
+  storageBucket: "albasha-menu.appspot.com",
+  messagingSenderId: "000000000000",
+  appId: "1:000000000000:web:0000000000000000"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const MENU_DOC = doc(db, 'menu', 'albasha');
+
+// ── SYNC STATUS UI ─────────────────────────────────
+function setSyncStatus(state){ // 'syncing' | 'synced' | 'offline'
+  const el = document.getElementById('sync-status');
+  if(!el) return;
+  const map = {
+    syncing: { text: '⏳ Syncing…',   color: '#e8a020' },
+    synced:  { text: '🟢 Live',        color: '#2ecc71' },
+    offline: { text: '🔴 Offline',     color: '#e74c3c' }
+  };
+  const s = map[state] || map.offline;
+  el.textContent = s.text;
+  el.style.color = s.color;
+}
+
+// ── FIREBASE SAVE ─────────────────────────────────
+async function saveToFirebase(){
+  setSyncStatus('syncing');
+  try {
+    await setDoc(MENU_DOC, {
+      cats:  DB.cats,
+      items: DB.items.map(it => {
+        // strip base64 photos before saving to Firestore (too large)
+        // photos are kept in localStorage only
+        const {photo, ...rest} = it;
+        return rest;
+      }),
+      tr: DB.tr,
+      updatedAt: Date.now()
+    });
+    setSyncStatus('synced');
+  } catch(e){
+    setSyncStatus('offline');
+    console.error('Firebase save error:', e);
+    toast('⚠️ Saved locally (Firebase offline)');
+  }
+  // Always also save to localStorage as backup
+  try { localStorage.setItem('albasha_v3', JSON.stringify(DB)); } catch(e){}
+}
+
+// ── REAL-TIME LISTENER ────────────────────────────
+let _firstLoad = true;
+function startFirebaseListener(){
+  setSyncStatus('syncing');
+  onSnapshot(MENU_DOC, snap => {
+    if(snap.exists()){
+      const data = snap.data();
+      // Merge Firebase data with local photos (photos stored only locally)
+      const localRaw = localStorage.getItem('albasha_v3');
+      const localDB  = localRaw ? JSON.parse(localRaw) : null;
+      DB.cats  = data.cats  || DB.cats;
+      DB.tr    = data.tr    || DB.tr;
+      // Merge items: use Firebase data but restore local photos
+      const localPhotos = {};
+      if(localDB && localDB.items){
+        localDB.items.forEach(it => { if(it.photo) localPhotos[it.id] = it.photo; });
+      }
+      DB.items = (data.items || DB.items).map(it => ({
+        ...it,
+        photo: localPhotos[it.id] || it.photo || null
+      }));
+      try { localStorage.setItem('albasha_v3', JSON.stringify(DB)); } catch(e){}
+      setSyncStatus('synced');
+      if(_firstLoad){
+        _firstLoad = false;
+        onDBReady();
+      } else {
+        // Live update: refresh UI if not in admin mode
+        if(!document.getElementById('adm-ov').classList.contains('show')){
+          buildGrid();
+          loadSlides(curCat);
+        }
+        toast('🔄 Menu updated');
+      }
+    } else {
+      // No Firestore doc yet — use built-in defaults, then save them up
+      setSyncStatus('syncing');
+      saveToFirebase().then(() => {
+        if(_firstLoad){ _firstLoad = false; onDBReady(); }
+      });
+    }
+  }, err => {
+    setSyncStatus('offline');
+    console.error('Firestore listener error:', err);
+    if(_firstLoad){ _firstLoad = false; onDBReady(); }
+  });
+}
+
+// Expose save globally so existing admin code calls it
+window._fbSave = saveToFirebase;
+window.startFirebaseListener = startFirebaseListener;
+
+// Auto-start
+startFirebaseListener();
+</script>
+
+<script>
+// ── SPLASH ────────────────────────────────────────
+function closeSplash(){
+  const sp=document.getElementById('splash');
+  sp.classList.add('hiding');
+  setTimeout(()=>sp.classList.add('gone'),700);
+}
+
+function openSplash(){
+  const sp=document.getElementById('splash');
+  sp.classList.remove('gone','hiding');
+}
+
+// Swipe on splash also closes it
+(function(){
+  let sx=0,sy=0;
+  document.getElementById('splash').addEventListener('touchstart',e=>{
+    sx=e.touches[0].clientX;
+    sy=e.touches[0].clientY;
+  },{passive:true});
+  document.getElementById('splash').addEventListener('touchend',e=>{
+    const dx=Math.abs(e.changedTouches[0].clientX-sx);
+    const dy=Math.abs(e.changedTouches[0].clientY-sy);
+    if(dx>30||dy>30) closeSplash();
+  },{passive:true});
+})();
+
+// ── EMOJI MAP ─────────────────────────────────────
+const EMOJIS={
+  'Breakfast':'🍳','Al Basha Special Juices':'🧃','Mojitos & Cold Drinks':'🍹',
+  'Fresh Juices':'🥤','Pizza Dishes':'🍕','Salad Dishes':'🥗',
+  'Starters & Soups':'🍲','Arabian Dishes':'🍛','Fast Food':'🍔',
+  'Chicken Dishes':'🍗','Beef Dishes':'🍖','Pasta Dishes':'🍝','Fish Dishes':'🐟'
+};
+const CAT_COLORS={
+  'Breakfast':['#7B3F00','#D2691E'],
+  'Al Basha Special Juices':['#1a3a2a','#2d6a4f'],
+  'Mojitos & Cold Drinks':['#0d3b4f','#1a7a8a'],
+  'Fresh Juices':['#1a4a1a','#2d8a2d'],
+  'Pizza Dishes':['#4a1a0a','#9b3a1a'],
+  'Salad Dishes':['#1a3a1a','#3a6a2a'],
+  'Starters & Soups':['#3a2a0a','#7a5a1a'],
+  'Arabian Dishes':['#2a1a0a','#6a3a0a'],
+  'Fast Food':['#3a0a0a','#8a1a1a'],
+  'Chicken Dishes':['#3a2a00','#8a6a00'],
+  'Beef Dishes':['#2a0a0a','#7a1a1a'],
+  'Pasta Dishes':['#2a1a2a','#6a3a6a'],
+  'Fish Dishes':['#0a1a3a','#1a3a7a'],
+};
+
+// ── UI STRINGS ─────────────────────────────────────
+const UI={
+  en:{cat:'Select Category',birr:'Birr',empty:'No items in this category'},
+  am:{cat:'ምድብ ይምረጡ',birr:'ብር',empty:'ምንም ዕቃ የለም'},
+  om:{cat:'Ramaddii filadhu',birr:'Birr',empty:'Wanti hin jiru'},
+  ar:{cat:'اختر الفئة',birr:'بيرر',empty:'لا توجد عناصر'},
+  so:{cat:'Dooro qaybta',birr:'Birr',empty:'Wax ma jiro'}
+};
+
+// ── BUILT-IN TRANSLATIONS ─────────────────────────
+const BTR={
+  'Melewa':{am:'መለዋ',om:'Meleewa',ar:'ميلوا',so:'Meleewa'},
+  'Fetira with Honey':{am:'ፍትሪ ከማር ጋር',om:'Fetira fi damma',ar:'فطيرة بالعسل',so:'Fetira iyo malab'},
+  'Chechebsa':{am:'ጨጨብሳ',om:'Cheechebsaa',ar:'تشيتشيبسا',so:'Chechebsa'},
+  'Omlet':{am:'ኦምሌት',om:'Eeglee',ar:'أومليت',so:'Omelet'},
+  'Scramble Egg':{am:'ስክራምብል እንቁላል',om:'Foodaa furdaa',ar:'بيض مخفوق',so:'Ukun shiilshilay'},
+  'Genfo':{am:'ገንፎ',om:'Marqaa',ar:'عصيدة',so:'Maraq'},
+  'Kinche':{am:'ቅንጬ',om:'Kinchee',ar:'كنتشي',so:'Kinche'},
+  'Qanta Firfir':{am:'ቅንጣ ፍርፍር',om:'Qantaa Firfir',ar:'قنطة فرفر',so:'Qanta Firfir'},
+  'Tibs Firfir (Alcha)':{am:'ጥብስ ፍርፍር አልጫ',om:'Tibs Firfir',ar:'تبس فرفر',so:'Tibs Firfir'},
+  'Fish Goulash':{am:'የዓሣ ጉላሽ',om:'Gulaash qurxummii',ar:'جولاش السمك',so:'Kalluun gulash'},
+  'Fish Cutlet':{am:'የዓሣ ቆረጣ',om:'Qurxummii cutlet',ar:'قطلت السمك',so:'Kalluun cutlet'},
+  'Grilled Cod Fish':{am:'የተጠበሰ ዓሣ',om:'Qurxummii grilii',ar:'سمك مشوي',so:'Kalluun karbaashay'},
+  'Fried Fish Koroso':{am:'የተጠበሰ ዓሣ ቆሮሶ',om:'Qurxummii firaayii',ar:'سمك مقلي كوروسو',so:'Kalluun la shiilay'},
+  'Fish Kitfo':{am:'የዓሣ ክትፎ',om:'Qurxummii kitfoo',ar:'كتفو السمك',so:'Kalluun kitfo'},
+  'Chicken Kebab':{am:'የዶሮ ቀበብ',om:'Kebab lukkuu',ar:'كباب الدجاج',so:'Digaag kebab'},
+  'Oriental Chicken':{am:'ኦሪየንታል ዶሮ',om:'Lukkuu gaanfa',ar:'دجاج شرقي',so:'Digaag bariga'},
+  'Chicken Breast':{am:'የዶሮ ደረት',om:'Lafa lukkuu',ar:'صدر الدجاج',so:'Lafo digaag'},
+  'Full Roasted Chicken':{am:'ሙሉ ዶሮ',om:'Lukkuu guutu',ar:'دجاجة مشوية كاملة',so:'Digaag dhan'},
+  'Chicken Shawarma':{am:'የዶሮ ሻዋርማ',om:'Shawarma lukkuu',ar:'شاورما دجاج',so:'Digaag shawarma'},
+  'Half Roasted Chicken':{am:'ግማሽ ዶሮ',om:'Walakka lukkuu',ar:'نصف دجاجة مشوية',so:'Digaag badh'},
+  'Lasagna':{am:'ላዛኛ',om:'Laazaanyaa',ar:'لازانيا',so:'Lasagna'},
+  'Pasta al Forno':{am:'ፓስታ አል ፎርኖ',om:'Pasta al Forno',ar:'معكرونة الفرن',so:'Pasta al Forno'},
+  'Ravioli':{am:'ራቪዮሊ',om:'Raaviolii',ar:'رافيولي',so:'Ravioli'},
+  'Tagliatelle with Meat Sauce':{am:'ታሊያቴሌ ከስጋ ሾርባ',om:'Tagliatelle foon',ar:'تالياتيللي باللحم',so:'Tagliatelle'},
+  'Penne with Meat Sauce':{am:'ፔኔ ከስጋ ሾርባ',om:'Penne foon',ar:'بيني باللحم',so:'Penne'},
+  'Penne with Tomato Sauce':{am:'ፔኔ ከቲማቲም ሾርባ',om:'Penne tomato',ar:'بيني بصلصة الطماطم',so:'Penne tamatiis'},
+  'Penne with Vegetable Sauce':{am:'ፔኔ ከአትክልት ሾርባ',om:'Penne midhaanii',ar:'بيني بصلصة الخضار',so:'Penne khudaar'},
+  'Penne with Alfredo Sauce':{am:'ፔኔ ከአልፍሬዶ ሾርባ',om:'Penne Alfredo',ar:'بيني ألفريدو',so:'Penne Alfredo'},
+  'Penne with BBQ Beef':{am:'ፔኔ ከቢቢኪው ስጋ',om:'Penne BBQ',ar:'بيني لحم بيبيكيو',so:'Penne BBQ'},
+};
+
+// ── DEFAULT DATA ───────────────────────────────────
+let DB=JSON.parse(localStorage.getItem('albasha_v3')||'null')||{
+  cats:[
+    {id:'c0',n:'Breakfast'},{id:'c1',n:'Al Basha Special Juices'},{id:'c2',n:'Mojitos & Cold Drinks'},
+    {id:'c3',n:'Fresh Juices'},{id:'c4',n:'Pizza Dishes'},{id:'c5',n:'Salad Dishes'},
+    {id:'c6',n:'Starters & Soups'},{id:'c7',n:'Arabian Dishes'},{id:'c8',n:'Fast Food'},
+    {id:'c9',n:'Chicken Dishes'},{id:'c10',n:'Beef Dishes'},{id:'c11',n:'Pasta Dishes'},{id:'c12',n:'Fish Dishes'}
+  ],
+  items:[
+    {id:'i0',c:'c0',n:'Melewa',p:195},{id:'i1',c:'c0',n:'Fetira with Honey',p:295},
+    {id:'i2',c:'c0',n:'Chechebsa',p:195},{id:'i3',c:'c0',n:'Omlet',p:295},
+    {id:'i4',c:'c0',n:'Scramble Egg',p:295},{id:'i5',c:'c0',n:'Genfo',p:295},
+    {id:'i6',c:'c0',n:'Kinche',p:295},{id:'i7',c:'c0',n:'Qanta Firfir',p:495},
+    {id:'i8',c:'c0',n:'Tibs Firfir (Alcha)',p:495},
+    {id:'i9',c:'c1',n:'Al Basha Special Juice',p:0},{id:'i10',c:'c1',n:'Mango Milkshake',p:0},
+    {id:'i11',c:'c1',n:'Avocado Milkshake',p:0},{id:'i12',c:'c1',n:'Papaya Milkshake',p:0},
+    {id:'i13',c:'c1',n:'Banana Milkshake',p:0},{id:'i14',c:'c1',n:'Strawberry Milkshake',p:0},
+    {id:'i15',c:'c1',n:'Cocktail Shake',p:0},{id:'i16',c:'c1',n:'Kiya Special',p:0},
+    {id:'i17',c:'c2',n:'Ice Coffee',p:0},{id:'i18',c:'c2',n:'Mint Mojito',p:0},
+    {id:'i19',c:'c2',n:'Orange Mint Mojito',p:0},{id:'i20',c:'c2',n:'Watermelon Mojito',p:0},
+    {id:'i21',c:'c2',n:'Fruit Punch',p:0},{id:'i22',c:'c2',n:'Mojito Cocktail',p:0},
+    {id:'i23',c:'c2',n:'Lemon with Orange',p:0},
+    {id:'i24',c:'c3',n:'Avocado Juice',p:0},{id:'i25',c:'c3',n:'Papaya Juice',p:0},
+    {id:'i26',c:'c3',n:'Mango Juice',p:0},{id:'i27',c:'c3',n:'Banana Juice',p:0},
+    {id:'i28',c:'c3',n:'Strawberry Juice',p:0},{id:'i29',c:'c3',n:'Watermelon Juice',p:0},
+    {id:'i30',c:'c3',n:'Orange Juice',p:0},{id:'i31',c:'c3',n:'Lemon Juice',p:0},
+    {id:'i32',c:'c3',n:'Pineapple Juice',p:0},{id:'i33',c:'c3',n:'Spris Juice',p:0},
+    {id:'i34',c:'c4',n:'Al Basha Special Pizza',p:0},{id:'i35',c:'c4',n:'Beef Pizza',p:0},
+    {id:'i36',c:'c4',n:'Tuna Pizza',p:0},{id:'i37',c:'c4',n:'Chicken Pizza',p:0},
+    {id:'i38',c:'c4',n:'Vegetable Pizza',p:0},{id:'i39',c:'c4',n:'Margherita Pizza',p:0},
+    {id:'i40',c:'c5',n:'Mixed Salad',p:0},{id:'i41',c:'c5',n:'Tuna Salad',p:0},
+    {id:'i42',c:'c5',n:'Chicken Salad',p:0},{id:'i43',c:'c5',n:'Niçoise Salad',p:0},
+    {id:'i44',c:'c6',n:'Minestrone Soup',p:0},{id:'i45',c:'c6',n:'Chicken Soup',p:0},
+    {id:'i46',c:'c6',n:'Vegetable Soup',p:0},{id:'i47',c:'c6',n:'Fish Soup',p:0},
+    {id:'i48',c:'c7',n:'Al Basha Special Mandi',p:0},{id:'i49',c:'c7',n:'Al Basha Special Biryani',p:0},
+    {id:'i50',c:'c8',n:'Club Sandwich',p:0},{id:'i51',c:'c8',n:'Special Burger',p:0},
+    {id:'i52',c:'c8',n:'Chicken Burger',p:0},{id:'i53',c:'c8',n:'Burger Pizza',p:0},
+    {id:'i54',c:'c8',n:'Tuna Sandwich',p:0},{id:'i55',c:'c8',n:'Beef Burger',p:0},
+    {id:'i56',c:'c8',n:'Tin Burger',p:0},
+    {id:'i57',c:'c9',n:'Chicken Kebab',p:1395},{id:'i58',c:'c9',n:'Oriental Chicken',p:1395},
+    {id:'i59',c:'c9',n:'Chicken Breast',p:1395},{id:'i60',c:'c9',n:'Full Roasted Chicken',p:1395},
+    {id:'i61',c:'c9',n:'Chicken Shawarma',p:0},{id:'i62',c:'c9',n:'Half Roasted Chicken',p:1395},
+    {id:'i63',c:'c10',n:'Beef Fillet Steak',p:0},{id:'i64',c:'c10',n:'Chicken Tibs',p:0},
+    {id:'i65',c:'c10',n:'Beef BBQ',p:0},
+    {id:'i66',c:'c11',n:'Lasagna',p:995},{id:'i67',c:'c11',n:'Pasta al Forno',p:995},
+    {id:'i68',c:'c11',n:'Ravioli',p:995},{id:'i69',c:'c11',n:'Tagliatelle with Meat Sauce',p:1395},
+    {id:'i70',c:'c11',n:'Penne with Meat Sauce',p:1395},{id:'i71',c:'c11',n:'Penne with Tomato Sauce',p:1395},
+    {id:'i72',c:'c11',n:'Penne with Vegetable Sauce',p:1395},{id:'i73',c:'c11',n:'Penne with Alfredo Sauce',p:1395},
+    {id:'i74',c:'c11',n:'Penne with BBQ Beef',p:1395},
+    {id:'i75',c:'c12',n:'Fish Goulash',p:895},{id:'i76',c:'c12',n:'Fish Cutlet',p:1395},
+    {id:'i77',c:'c12',n:'Grilled Cod Fish',p:1395},{id:'i78',c:'c12',n:'Fried Fish Koroso',p:1395},
+    {id:'i79',c:'c12',n:'Fish Kitfo',p:1395}
+  ],
+  tr:{}
+};
+
+// ── STATE ─────────────────────────────────────────
+let lang='en', curCat=null, curIdx=0, pinVal='', apSec='items';
+const PIN='1234';
+let isLight=false;
+
+// ── HELPERS ───────────────────────────────────────
+function save(){
+  // Save locally immediately, then push to Firebase
+  try { localStorage.setItem('albasha_v3',JSON.stringify(DB)); } catch(e){}
+  if(window._fbSave) window._fbSave();
+}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function getItems(cid){return cid===null?DB.items:DB.items.filter(i=>i.c===cid);}
+function getName(item){
+  if(lang==='en') return item.n;
+  if(DB.tr[item.id]&&DB.tr[item.id][lang]) return DB.tr[item.id][lang];
+  if(BTR[item.n]&&BTR[item.n][lang]) return BTR[item.n][lang];
+  return item.n;
+}
+function getDesc(item){
+  if(lang==='en') return item.desc||'';
+  const descKey='d'+lang;
+  if(DB.tr[item.id]&&DB.tr[item.id][descKey]) return DB.tr[item.id][descKey];
+  return item.desc||'';
+}
+
+// ── DB READY (called after first Firebase load or fallback) ───
+function onDBReady(){
+  // restore theme
+  if(localStorage.getItem('albasha_theme')==='light'){
+    isLight=true;
+    document.body.classList.add('light');
+    const tb=document.getElementById('theme-btn');
+    if(tb) tb.textContent='🌙';
+  }
+  buildGrid();
+  curCat=null;
+  document.getElementById('sw').classList.add('show');
+  document.getElementById('slide-hdr').style.display='none';
+  document.getElementById('cat-jump-btn').style.display='flex';
+  loadSlides(null);
+}
+function getItems(cid){return cid===null?DB.items:DB.items.filter(i=>i.c===cid);}
+function getName(item){
+  if(lang==='en') return item.n;
+  if(DB.tr[item.id]&&DB.tr[item.id][lang]) return DB.tr[item.id][lang];
+  if(BTR[item.n]&&BTR[item.n][lang]) return BTR[item.n][lang];
+  return item.n;
+}
+function getDesc(item){
+  if(lang==='en') return item.desc||'';
+  const descKey='d'+lang; // dam, dom, dso, dar
+  if(DB.tr[item.id]&&DB.tr[item.id][descKey]) return DB.tr[item.id][descKey];
+  return item.desc||'';
+}
+
+// ── LANGUAGE ──────────────────────────────────────
+function toggleLang(){document.getElementById('lang-drop').classList.toggle('open');}
+function setLang(l){
+  lang=l;
+  document.getElementById('lang-drop').classList.remove('open');
+  const lbl={en:'EN',am:'አማ',om:'OM',ar:'ع',so:'SO'};
+  document.getElementById('lang-lbl').textContent=lbl[l]||'EN';
+  document.body.setAttribute('dir',l==='ar'?'rtl':'ltr');
+  document.querySelectorAll('#lang-drop button').forEach(b=>b.classList.toggle('cur',b.dataset.l===l));
+  loadSlides(curCat); // reload slides in current language
+}
+document.addEventListener('click',e=>{
+  const d=document.getElementById('lang-drop'),b=document.getElementById('glob-btn');
+  if(!d.contains(e.target)&&!b.contains(e.target)) d.classList.remove('open');
+});
+
+// ── THEME ─────────────────────────────────────────
+function toggleTheme(){
+  isLight=!isLight;
+  document.body.classList.toggle('light',isLight);
+  document.getElementById('theme-btn').textContent=isLight?'🌙':'☀️';
+  localStorage.setItem('albasha_theme',isLight?'light':'dark');
+}
+
+// ── CATEGORY GRID ─────────────────────────────────
+function buildGrid(){
+  const g=document.getElementById('cat-grid');
+  g.innerHTML='';
+  DB.cats.forEach(cat=>{
+    const items=getItems(cat.id);
+    if(!items.length) return;
+    const d=document.createElement('div');
+    d.className='cat-card';
+    const em=EMOJIS[cat.n]||'🍽';
+    const colors=CAT_COLORS[cat.n]||['#1a1500','#221c00'];
+    d.style.background=`linear-gradient(145deg,${colors[0]} 0%,${colors[1]} 100%)`;
+    d.style.border='1px solid rgba(201,168,76,.15)';
+    d.innerHTML=`
+      <div class="cat-top-line">
+        <div class="cat-emoji-large">${em}</div>
+        <div class="cat-top-name">${cat.n}</div>
+      </div>
+      <div class="cat-count">${items.length} items ›</div>`;
+    d.onclick=()=>selectCat(cat.id);
+    g.appendChild(d);
+  });
+}
+
+function showCats(){
+  // Customers always stay in swipe mode — just reload all items from start
+  curCat=null;
+  loadSlides(null);
+  document.getElementById('sw').classList.add('show');
+  document.getElementById('slide-hdr').style.display='none';
+  document.getElementById('cat-jump-btn').style.display='flex';
+  document.getElementById('cat-drawer').classList.remove('open');
+}
+
+function showAllItems(){
+  curCat=null;
+  document.getElementById('cat-screen').style.display='none';
+  document.getElementById('sw').classList.add('show');
+  document.getElementById('slide-hdr').style.display='flex';
+  document.getElementById('cat-jump-btn').style.display='flex';
+  loadSlides(null);
+}
+
+function goBack(){showCats();}
+
+function selectCat(cid){
+  curCat=cid;
+  document.getElementById('cat-screen').style.display='none';
+  document.getElementById('sw').classList.add('show');
+  document.getElementById('slide-hdr').style.display='flex';
+  document.getElementById('cat-jump-btn').style.display='flex';
+  loadSlides(cid);
+}
+
+// ── SLIDES ────────────────────────────────────────
+function loadSlides(cid){
+  curIdx=0;
+  const con=document.getElementById('slides-container');
+  const dotsEl=document.getElementById('dots');
+  const items=getItems(cid);
+  const cat=DB.cats.find(c=>c.id===cid);
+  const em=EMOJIS[cat?cat.n:'']||'🍽';
+  con.innerHTML=''; dotsEl.innerHTML='';
+  if(!items.length){
+    con.innerHTML=`<div class="slide active" style="display:flex;align-items:center;justify-content:center;"><div class="s-bg"></div><div style="position:relative;z-index:3;color:var(--muted);">${UI[lang].empty}</div></div>`;
+    document.getElementById('big-counter').textContent='';
+    return;
+  }
+  items.forEach((item,i)=>{
+    const sl=document.createElement('div');
+    sl.className='slide';
+    const nat=getName(item);
+    const pr=item.p>0?item.p.toLocaleString():'—';
+    const prl=item.p>0?UI[lang].birr:'';
+    const desc=getDesc(item);
+    const catName=DB.cats.find(c=>c.id===item.c);
+    sl.innerHTML=`
+      <div class="s-bg"></div>
+      ${item.photo?`<img class="s-photo" src="${item.photo}"/>`:`<div class="s-emoji">${em}</div>`}
+      <div class="s-overlay${item.photo?' has-photo':''}"></div>
+      <div class="s-info">
+        ${catName?`<div class="s-cat-tag">${catName.n}</div>`:''}
+        <div class="s-name">${nat}</div>
+        ${nat!==item.n?`<div class="s-native">${item.n}</div>`:''}
+        ${desc?`<div class="s-desc">${desc}</div>`:''}
+        <div class="s-price-row">
+          <div class="s-price">${pr}</div>
+          ${prl?`<div class="s-price-lbl">${prl}</div>`:''}
+        </div>
+      </div>`;
+    con.appendChild(sl);
+    const dot=document.createElement('div');
+    dot.className='dot'+(i===0?' on':'');
+    dotsEl.appendChild(dot);
+  });
+  updateCounter(items.length);
+  // Set initial position instantly (reuse con declared above)
+  con.style.transition='none';
+  con.style.transform='translateX(0)';
+  initSwipe();
+}
+
+function updateCounter(total){
+  if(total===undefined) total=getItems(curCat).length;
+  const bc=document.getElementById('big-counter');
+  if(bc) bc.textContent=total>0?`${curIdx+1} / ${total}`:'';
+}
+
+function setSlidePos(x, animate){
+  const con=document.getElementById('slides-container');
+  if(!con) return;
+  con.style.transition = animate ? 'transform .42s cubic-bezier(.25,.46,.45,.94)' : 'none';
+  con.style.transform = `translateX(${x}px)`;
+}
+
+function goTo(n){
+  const items=getItems(curCat);
+  const total=items.length;
+  if(!total) return;
+  n=((n%total)+total)%total;
+  curIdx=n;
+  const w=document.getElementById('sw').offsetWidth||window.innerWidth;
+  setSlidePos(-curIdx*w, true);
+  document.querySelectorAll('#dots .dot').forEach((d,i)=>d.classList.toggle('on',i===curIdx));
+  updateCounter(total);
+}
+
+// ── SWIPE ─────────────────────────────────────────
+function initSwipe(){
+  const sw=document.getElementById('sw');
+  // Remove old listeners by replacing element
+  const fresh=sw.cloneNode(false);
+  while(sw.firstChild) fresh.appendChild(sw.firstChild);
+  sw.parentNode.replaceChild(fresh,sw);
+  const el=document.getElementById('sw');
+  const con=document.getElementById('slides-container');
+
+  let startX=0, startY=0, startTime=0;
+  let dragging=false, lockAxis=null, dragStartOffset=0;
+
+  el.addEventListener('touchstart',e=>{
+    const t=e.touches[0];
+    startX=t.clientX; startY=t.clientY;
+    startTime=Date.now();
+    dragging=true; lockAxis=null;
+    const w=el.offsetWidth;
+    dragStartOffset=-curIdx*w;
+    con.style.transition='none';
+  },{passive:true});
+
+  el.addEventListener('touchmove',e=>{
+    if(!dragging) return;
+    const t=e.touches[0];
+    const dx=t.clientX-startX;
+    const dy=t.clientY-startY;
+
+    if(lockAxis===null){
+      if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>6){ lockAxis='h'; }
+      else if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>6){ lockAxis='v'; }
+      else return;
+    }
+    if(lockAxis==='h'){
+      e.preventDefault();
+      const items=getItems(curCat);
+      const w=el.offsetWidth;
+      let newX=dragStartOffset+dx;
+      if(newX>0) newX=newX*0.25;
+      if(newX<-(items.length-1)*w) newX=-(items.length-1)*w+(newX+(items.length-1)*w)*0.25;
+      con.style.transition='none';
+      con.style.transform=`translateX(${newX}px)`;
+    }
+  },{passive:false});
+
+  el.addEventListener('touchend',e=>{
+    if(!dragging) return;
+    dragging=false;
+    const t=e.changedTouches[0];
+    const dx=t.clientX-startX;
+    const dy=t.clientY-startY;
+    const dt=Date.now()-startTime;
+    const w=el.offsetWidth;
+
+    if(lockAxis==='h'){
+      const velocity=Math.abs(dx)/dt;
+      if(velocity>0.3||(Math.abs(dx)>w*0.3)){
+        dx<0 ? goTo(curIdx+1) : goTo(curIdx-1);
+      } else {
+        goTo(curIdx);
+      }
+    } else if(lockAxis==='v'){
+      // swipe down → welcome screen
+      if(dy>60&&dt<500) openSplash();
+    }
+    lockAxis=null;
+  },{passive:true});
+
+  // Mouse support for desktop testing
+  let mdown=false, msx=0, mStartOffset=0;
+  el.addEventListener('mousedown',e=>{
+    mdown=true; msx=e.clientX;
+    mStartOffset=-curIdx*el.offsetWidth;
+    con.style.transition='none';
+    e.preventDefault();
+  });
+  el.addEventListener('mousemove',e=>{
+    if(!mdown) return;
+    const dx=e.clientX-msx;
+    con.style.transform=`translateX(${mStartOffset+dx}px)`;
+  });
+  el.addEventListener('mouseup',e=>{
+    if(!mdown) return; mdown=false;
+    const dx=e.clientX-msx;
+    const w=el.offsetWidth;
+    if(Math.abs(dx)>w*0.2) dx<0?goTo(curIdx+1):goTo(curIdx-1);
+    else goTo(curIdx);
+  });
+  el.addEventListener('mouseleave',e=>{
+    if(!mdown) return; mdown=false;
+    goTo(curIdx);
+  });
+}
+
+// ── PIN ───────────────────────────────────────────
+function openPin(){pinVal='';updPin();document.getElementById('pin-ov').classList.add('show');document.getElementById('pin-err').textContent='';}
+function closePin(){document.getElementById('pin-ov').classList.remove('show');}
+function pk(k){
+  if(k==='c'){pinVal='';document.getElementById('pin-err').textContent='';}
+  else if(k==='ok'){
+    if(pinVal===PIN){closePin();openAdmin();}
+    else{document.getElementById('pin-err').textContent='Wrong PIN';pinVal='';}
+  } else {if(pinVal.length<4) pinVal+=k;}
+  updPin();
+}
+function updPin(){document.getElementById('pin-disp').textContent='●'.repeat(pinVal.length)+'○'.repeat(4-pinVal.length);}
+
+// ── ADMIN ─────────────────────────────────────────
+function openAdmin(){
+  document.getElementById('adm-ov').classList.add('show');
+  document.getElementById('adm-form-page').classList.remove('show');
+  // Show setup banner if using the demo API key
+  const banner = document.getElementById('fb-setup-banner');
+  if(banner){
+    const isDemoKey = (typeof firebaseConfig !== 'undefined' && firebaseConfig.apiKey && firebaseConfig.apiKey.includes('Demo')) || document.querySelector('script[type="module"]')?.textContent?.includes('AlBashaMenuApp-Replace-Me');
+    banner.style.display = (document.getElementById('sync-status')?.textContent?.includes('Offline') || isDemoKey) ? 'block' : 'none';
+  }
+  renderItemList();
+}
+function closeAdmin(){
+  document.getElementById('adm-ov').classList.remove('show');
+  save(); buildGrid(); loadSlides(null);
+}
+
+// ── ITEM LIST ─────────────────────────────────────
+let dragSrc=null, dragOver=null;
+
+function renderItemList(){
+  const el=document.getElementById('adm-item-list'); if(!el) return;
+  el.innerHTML=DB.items.map((item,idx)=>{
+    const cat=DB.cats.find(c=>c.id===item.c);
+    const thumb=item.photo
+      ?`<img src="${item.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
+      :`<div style="font-size:22px;display:flex;align-items:center;justify-content:center;width:100%;height:100%;">${EMOJIS[cat?cat.n:'']||'\u{1F37D}'}</div>`;
+    return `<div class="adm-list-item" data-id="${item.id}" draggable="true">
+      <div class="adm-li-drag" title="Drag to reorder">⠿</div>
+      <div class="adm-li-thumb">${thumb}</div>
+      <div class="adm-li-info">
+        <div class="adm-li-name">${item.n}</div>
+        <div class="adm-li-cat">${cat?cat.n:'\u2014'}</div>
+        <div class="adm-li-price">${item.p>0?'ETB '+item.p.toLocaleString():''}</div>
+      </div>
+      <div class="adm-li-actions">
+        <button class="adm-li-edit" onclick="openEditItem('${item.id}')">✏️</button>
+        <button class="adm-li-del" onclick="delItem('${item.id}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Attach drag events
+  el.querySelectorAll('.adm-list-item').forEach(row=>{
+    row.addEventListener('dragstart', e=>{
+      dragSrc=row;
+      row.style.opacity='.4';
+      e.dataTransfer.effectAllowed='move';
+    });
+    row.addEventListener('dragend', e=>{
+      row.style.opacity='';
+      el.querySelectorAll('.adm-list-item').forEach(r=>r.classList.remove('drag-over'));
+    });
+    row.addEventListener('dragover', e=>{
+      e.preventDefault();
+      e.dataTransfer.dropEffect='move';
+      if(row!==dragSrc){
+        el.querySelectorAll('.adm-list-item').forEach(r=>r.classList.remove('drag-over'));
+        row.classList.add('drag-over');
+      }
+    });
+    row.addEventListener('drop', e=>{
+      e.preventDefault();
+      if(dragSrc===row) return;
+      const srcId=dragSrc.dataset.id;
+      const tgtId=row.dataset.id;
+      const srcIdx=DB.items.findIndex(i=>i.id===srcId);
+      const tgtIdx=DB.items.findIndex(i=>i.id===tgtId);
+      if(srcIdx<0||tgtIdx<0) return;
+      const [moved]=DB.items.splice(srcIdx,1);
+      DB.items.splice(tgtIdx,0,moved);
+      save();
+      renderItemList();
+    });
+  });
+
+  // Touch drag support for mobile
+  initTouchDrag(el);
+}
+
+function initTouchDrag(el){
+  let touchItem=null, clone=null, startY=0, startIdx=0;
+
+  el.addEventListener('touchstart', e=>{
+    const row=e.target.closest('.adm-list-item');
+    const handle=e.target.closest('.adm-li-drag');
+    if(!row||!handle) return;
+    touchItem=row;
+    startY=e.touches[0].clientY;
+    startIdx=[...el.children].indexOf(row);
+    row.style.opacity='.4';
+    // create a floating clone
+    clone=row.cloneNode(true);
+    clone.style.cssText=`position:fixed;left:${row.getBoundingClientRect().left}px;top:${row.getBoundingClientRect().top}px;width:${row.offsetWidth}px;z-index:99999;pointer-events:none;opacity:.9;transform:scale(1.02);box-shadow:0 8px 32px rgba(0,0,0,.6);border-radius:10px;`;
+    document.body.appendChild(clone);
+  },{passive:true});
+
+  el.addEventListener('touchmove', e=>{
+    if(!touchItem||!clone) return;
+    e.preventDefault();
+    const y=e.touches[0].clientY;
+    const dy=y-startY;
+    clone.style.top=(touchItem.getBoundingClientRect().top+dy)+'px';
+    // find which row we're hovering over
+    const rows=[...el.querySelectorAll('.adm-list-item')];
+    rows.forEach(r=>r.classList.remove('drag-over'));
+    const hovered=rows.find(r=>{
+      const rect=r.getBoundingClientRect();
+      return y>=rect.top&&y<=rect.bottom&&r!==touchItem;
+    });
+    if(hovered) hovered.classList.add('drag-over');
+  },{passive:false});
+
+  el.addEventListener('touchend', e=>{
+    if(!touchItem||!clone) return;
+    if(clone.parentNode) clone.parentNode.removeChild(clone);
+    clone=null;
+    touchItem.style.opacity='';
+    const y=e.changedTouches[0].clientY;
+    const rows=[...el.querySelectorAll('.adm-list-item')];
+    rows.forEach(r=>r.classList.remove('drag-over'));
+    const hovered=rows.find(r=>{
+      const rect=r.getBoundingClientRect();
+      return y>=rect.top&&y<=rect.bottom&&r!==touchItem;
+    });
+    if(hovered){
+      const srcId=touchItem.dataset.id;
+      const tgtId=hovered.dataset.id;
+      const srcIdx=DB.items.findIndex(i=>i.id===srcId);
+      const tgtIdx=DB.items.findIndex(i=>i.id===tgtId);
+      if(srcIdx>=0&&tgtIdx>=0){
+        const [moved]=DB.items.splice(srcIdx,1);
+        DB.items.splice(tgtIdx,0,moved);
+        save();
+        renderItemList();
+      }
+    }
+    touchItem=null;
+  },{passive:true});
+}
+
+function delItem(id){
+  if(!confirm('Delete this item?')) return;
+  DB.items=DB.items.filter(i=>i.id!==id);
+  delete DB.tr[id];
+  save(); renderItemList(); toast('Deleted');
+}
+
+// ── FORM PAGE ─────────────────────────────────────
+let editingItemId=null;
+
+function openAddItem(){
+  editingItemId=null;
+  document.getElementById('adm-form-title-text').textContent='Add Item';
+  buildFormPage(null);
+  document.getElementById('adm-form-page').classList.add('show');
+}
+
+function openEditItem(id){
+  editingItemId=id;
+  document.getElementById('adm-form-title-text').textContent='Edit Item';
+  buildFormPage(id);
+  document.getElementById('adm-form-page').classList.add('show');
+}
+
+function closeFormPage(){
+  document.getElementById('adm-form-page').classList.remove('show');
+  renderItemList();
+}
+
+function buildFormPage(id){
+  const item = id ? DB.items.find(i=>i.id===id) : null;
+  const tr   = id ? (DB.tr[id]||{}) : {};
+  const photoHtml = item&&item.photo
+    ? `<img src="${item.photo}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+    : `<div class="ph-icon">\u{1F5BC}</div><div style="font-size:13px;color:var(--muted);">Pick Image</div>`;
+  const chips = DB.cats.map(c=>`
+    <button class="adm-chip${item&&item.c===c.id?' active':''}" onclick="selectChip(this,'${c.id}')">${EMOJIS[c.n]||'\u{1F37D}'} ${c.n}</button>`).join('');
+  document.getElementById('adm-form-body').innerHTML=`
+    <div class="adm-photo-picker">
+      <div class="adm-photo-preview" id="fp-preview">${photoHtml}</div>
+      <div class="adm-photo-btns">
+        <button class="adm-photo-btn" onclick="document.getElementById('fp-file').click()">\u{1F5BC} Pick Image</button>
+        <button class="adm-photo-btn" onclick="document.getElementById('fp-cam').click()">\u{1F4F7} Take Photo</button>
+      </div>
+    </div>
+    <input type="file" id="fp-file" accept="image/*" style="display:none" onchange="fpUpload(this)">
+    <input type="file" id="fp-cam"  accept="image/*" capture="environment" style="display:none" onchange="fpUpload(this)">
+    <div class="adm-label">CATEGORY</div>
+    <div class="adm-chips" id="fp-chips">${chips}</div>
+    <input type="hidden" id="fp-cat" value="${item?item.c:(DB.cats[0]?DB.cats[0].id:'')}">
+    <div class="adm-label">PRICE (ETB)</div>
+    <input class="adm-input" id="fp-price" type="number" placeholder="0.00" value="${item?item.p:''}">
+    <div class="adm-label">NAME (ENGLISH) *</div>
+    <input class="adm-input" id="fp-en" placeholder="e.g. Grilled Chicken" value="${item?item.n:''}">
+    <div class="adm-label">NAME (AMHARIC)</div>
+    <input class="adm-input" id="fp-am" placeholder="\u12E8\u1270\u1328\u1260\u1230 \u12E8\u12F2\u12D0 \u1235\u121D" value="${tr.am||''}" >
+    <div class="adm-label">NAME (AFAAN OROMO)</div>
+    <input class="adm-input" id="fp-om" placeholder="e.g. Lukkuu Gubyame" value="${tr.om||''}" >
+    <div class="adm-label">NAME (SOMALI)</div>
+    <input class="adm-input" id="fp-so" placeholder="e.g. Digaag La Dubay" value="${tr.so||''}" >
+    <div class="adm-label">NAME (ARABIC)</div>
+    <input class="adm-input" id="fp-ar" placeholder="\u062F\u062C\u0627\u062C \u0645\u0634\u0648\u064A" dir="rtl" value="${tr.ar||''}" >
+    <div class="adm-label">DESCRIPTION (ENGLISH)</div>
+    <textarea class="adm-input" id="fp-den" placeholder="Enter English description...">${item?item.desc||'':''}</textarea>
+    <div class="adm-label">DESCRIPTION (AMHARIC)</div>
+    <textarea class="adm-input" id="fp-dam" placeholder="\u1218\u130D\u1208\u1338 \u12EB\u1235\u1308\u1261...">${tr.dam||''}</textarea>
+    <div class="adm-label">DESCRIPTION (AFAAN OROMO)</div>
+    <textarea class="adm-input" id="fp-dom" placeholder="Ibsa galchi...">${tr.dom||''}</textarea>
+    <div class="adm-label">DESCRIPTION (SOMALI)</div>
+    <textarea class="adm-input" id="fp-dso" placeholder="Sharraxaad geli...">${tr.dso||''}</textarea>
+    <div class="adm-label">DESCRIPTION (ARABIC)</div>
+    <textarea class="adm-input" id="fp-dar" placeholder="\u0623\u062F\u062E\u0644 \u0627\u0644\u0648\u0635\u0641..." dir="rtl">${tr.dar||''}</textarea>
+    <button class="adm-save-big" onclick="saveFormPage()">${id?'\u{1F4BE} Save Changes':'+ Add Item'}</button>
+    ${id?`<button class="adm-save-big" style="background:var(--red);margin-top:0;" onclick="if(confirm('Delete this item?\')){delItem('${id}');closeFormPage();}">\u{1F5D1} Delete Item</button>`:''}
+  `;
+  // Seed existing photo so it's preserved if admin doesn't change it
+  if(item&&item.photo){
+    document.getElementById('fp-preview').dataset.photo=item.photo;
+  }
+}
+
+function selectChip(el,catId){
+  document.querySelectorAll('#fp-chips .adm-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('fp-cat').value=catId;
+}
+
+function fpUpload(input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const prev=document.getElementById('fp-preview');
+    prev.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+    prev.dataset.photo=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveFormPage(){
+  const en=document.getElementById('fp-en').value.trim();
+  if(!en){toast('English name is required');return;}
+  const price=parseFloat(document.getElementById('fp-price').value)||0;
+  const cat=document.getElementById('fp-cat').value;
+  const preview=document.getElementById('fp-preview');
+  const photo=preview.dataset.photo||null;
+  const tr={
+    am:document.getElementById('fp-am').value.trim(),
+    om:document.getElementById('fp-om').value.trim(),
+    so:document.getElementById('fp-so').value.trim(),
+    ar:document.getElementById('fp-ar').value.trim(),
+    dam:document.getElementById('fp-dam').value.trim(),
+    dom:document.getElementById('fp-dom').value.trim(),
+    dso:document.getElementById('fp-dso').value.trim(),
+    dar:document.getElementById('fp-dar').value.trim(),
+  };
+  if(editingItemId){
+    const item=DB.items.find(i=>i.id===editingItemId);
+    if(item){
+      item.n=en; item.p=price; item.c=cat;
+      item.desc=document.getElementById('fp-den').value.trim();
+      if(photo) item.photo=photo;        // new upload or existing seed
+      else delete item.photo;            // no photo at all
+      DB.tr[editingItemId]=tr;
+    }
+    toast('\u2705 Saved: '+en);
+  } else {
+    const id='i'+Date.now();
+    const newItem={id,c:cat,n:en,p:price,desc:document.getElementById('fp-den').value.trim()};
+    if(photo) newItem.photo=photo;
+    DB.items.push(newItem);
+    DB.tr[id]=tr;
+    toast('\u2705 Item added!');
+  }
+  try{save();}catch(e){toast('\u26A0\uFE0F Storage full!');}
+  closeFormPage();
+}
+
+// ── CATEGORIES MODAL ──────────────────────────────
+function openCatModal(){
+  renderCatModal();
+  document.getElementById('cat-modal').classList.add('show');
+}
+function closeCatModal(){
+  document.getElementById('cat-modal').classList.remove('show');
+  renderItemList();
+}
+
+function renderCatModal(){
+  const el=document.getElementById('cat-modal-body'); if(!el) return;
+  const rows=DB.cats.map((cat)=>{
+    const thumb=cat.photo
+      ?`<img src="${cat.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
+      :`${EMOJIS[cat.n]||'\u{1F37D}'}`;
+    const trParts=[cat.am,cat.om,cat.so,cat.ar].filter(Boolean).join(' \u00B7 ');
+    return `<div class="cat-row" data-id="${cat.id}" draggable="true">
+      <div class="adm-li-drag" title="Drag to reorder">\u22BF</div>
+      <div class="cat-row-emoji" onclick="triggerCatPhoto('${cat.id}')" style="cursor:pointer;">
+        ${thumb}
+        <input type="file" accept="image/*" id="cph-${cat.id}" style="display:none" onchange="uploadCatPhoto('${cat.id}',this)">
+      </div>
+      <div class="cat-row-info">
+        <div class="cat-row-name">${cat.n}</div>
+        ${trParts?`<div class="cat-row-tr">${trParts}</div>`:''}
+      </div>
+      <div class="cat-row-actions">
+        <button class="cat-row-btn" onclick="openEditCat('${cat.id}')">\u270F</button>
+        <button class="cat-row-btn del" onclick="delCat('${cat.id}')">\u{1F5D1}</button>
+      </div>
+    </div>`;
+  }).join('');
+  el.innerHTML=rows+`
+    <div class="add-cat-form">
+      <div class="add-cat-title">ADD NEW CATEGORY</div>
+      <div class="add-cat-grid">
+        <input class="adm-input-sm" id="nc-en" placeholder="Name (English) *">
+        <input class="adm-input-sm" id="nc-am" placeholder="\u1235\u121D (\u12A0\u121B\u122D\u129B)">
+        <input class="adm-input-sm" id="nc-om" placeholder="Maqaa (Afaan Oromoo)">
+        <input class="adm-input-sm" id="nc-so" placeholder="Magac (Somali)">
+      </div>
+      <input class="adm-input-sm" style="width:100%;margin-bottom:12px;" id="nc-ar" placeholder="\u0627\u0644\u0627\u0633\u0645 (\u0639\u0631\u0628\u064A)" dir="rtl">
+      <button class="add-cat-btn" onclick="addCat()">+ Add Category</button>
+    </div>`;
+
+  // Attach drag events to category rows
+  let catDragSrc=null;
+  el.querySelectorAll('.cat-row[draggable]').forEach(row=>{
+    row.addEventListener('dragstart',e=>{
+      catDragSrc=row; row.style.opacity='.4';
+      e.dataTransfer.effectAllowed='move';
+    });
+    row.addEventListener('dragend',e=>{
+      row.style.opacity='';
+      el.querySelectorAll('.cat-row').forEach(r=>r.classList.remove('drag-over'));
+    });
+    row.addEventListener('dragover',e=>{
+      e.preventDefault(); e.dataTransfer.dropEffect='move';
+      if(row!==catDragSrc){
+        el.querySelectorAll('.cat-row').forEach(r=>r.classList.remove('drag-over'));
+        row.classList.add('drag-over');
+      }
+    });
+    row.addEventListener('drop',e=>{
+      e.preventDefault();
+      if(catDragSrc===row) return;
+      const srcId=catDragSrc.dataset.id;
+      const tgtId=row.dataset.id;
+      const si=DB.cats.findIndex(c=>c.id===srcId);
+      const ti=DB.cats.findIndex(c=>c.id===tgtId);
+      if(si<0||ti<0) return;
+      const [moved]=DB.cats.splice(si,1);
+      DB.cats.splice(ti,0,moved);
+      save(); buildGrid(); renderCatModal();
+    });
+  });
+
+  // Touch drag for mobile
+  initCatTouchDrag(el);
+}
+
+function initCatTouchDrag(el){
+  let touchCat=null, clone=null, startY=0;
+  el.addEventListener('touchstart',e=>{
+    const row=e.target.closest('.cat-row[draggable]');
+    const handle=e.target.closest('.adm-li-drag');
+    if(!row||!handle) return;
+    touchCat=row; startY=e.touches[0].clientY;
+    row.style.opacity='.4';
+    clone=row.cloneNode(true);
+    clone.style.cssText=`position:fixed;left:${row.getBoundingClientRect().left}px;top:${row.getBoundingClientRect().top}px;width:${row.offsetWidth}px;z-index:99999;pointer-events:none;opacity:.9;transform:scale(1.02);box-shadow:0 8px 32px rgba(0,0,0,.6);border-radius:10px;background:var(--bg2);`;
+    document.body.appendChild(clone);
+  },{passive:true});
+  el.addEventListener('touchmove',e=>{
+    if(!touchCat||!clone) return;
+    e.preventDefault();
+    const y=e.touches[0].clientY;
+    clone.style.top=(touchCat.getBoundingClientRect().top+(y-startY))+'px';
+    el.querySelectorAll('.cat-row').forEach(r=>r.classList.remove('drag-over'));
+    const hovered=[...el.querySelectorAll('.cat-row[draggable]')].find(r=>{
+      const rect=r.getBoundingClientRect();
+      return y>=rect.top&&y<=rect.bottom&&r!==touchCat;
+    });
+    if(hovered) hovered.classList.add('drag-over');
+  },{passive:false});
+  el.addEventListener('touchend',e=>{
+    if(!touchCat||!clone) return;
+    clone.parentNode&&clone.parentNode.removeChild(clone); clone=null;
+    touchCat.style.opacity='';
+    const y=e.changedTouches[0].clientY;
+    el.querySelectorAll('.cat-row').forEach(r=>r.classList.remove('drag-over'));
+    const hovered=[...el.querySelectorAll('.cat-row[draggable]')].find(r=>{
+      const rect=r.getBoundingClientRect();
+      return y>=rect.top&&y<=rect.bottom&&r!==touchCat;
+    });
+    if(hovered){
+      const si=DB.cats.findIndex(c=>c.id===touchCat.dataset.id);
+      const ti=DB.cats.findIndex(c=>c.id===hovered.dataset.id);
+      if(si>=0&&ti>=0){
+        const [moved]=DB.cats.splice(si,1);
+        DB.cats.splice(ti,0,moved);
+        save(); buildGrid(); renderCatModal();
+      }
+    }
+    touchCat=null;
+  },{passive:true});
+}
+
+function addCat(){
+  const n=document.getElementById('nc-en').value.trim();
+  if(!n){toast('Enter category name');return;}
+  const id='c'+Date.now();
+  const cat={id,n};
+  const am=document.getElementById('nc-am').value.trim();
+  const om=document.getElementById('nc-om').value.trim();
+  const so=document.getElementById('nc-so').value.trim();
+  const ar=document.getElementById('nc-ar').value.trim();
+  if(am)cat.am=am; if(om)cat.om=om; if(so)cat.so=so; if(ar)cat.ar=ar;
+  DB.cats.push(cat);
+  save(); renderCatModal(); buildGrid(); toast('Category added!');
+}
+
+function delCat(id){
+  if(getItems(id).length){toast('Move or delete items in this category first!');return;}
+  if(!confirm('Delete this category?')) return;
+  DB.cats=DB.cats.filter(c=>c.id!==id);
+  save(); renderCatModal(); buildGrid(); toast('Deleted');
+}
+
+function openEditCat(id){
+  const cat=DB.cats.find(c=>c.id===id); if(!cat) return;
+  const n=prompt('Category name (English):',cat.n);
+  if(n===null) return;
+  if(!n.trim()){toast('Name cannot be empty');return;}
+  cat.n=n.trim();
+  save(); renderCatModal(); buildGrid(); toast('Saved!');
+}
+
+function triggerCatPhoto(id){document.getElementById('cph-'+id).click();}
+function uploadCatPhoto(id,input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const MAX=600; let w=img.width,h=img.height;
+      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}}else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}}
+      const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      const data=cv.toDataURL('image/jpeg',.85);
+      const cat=DB.cats.find(c=>c.id===id);
+      if(cat){cat.photo=data;try{save();renderCatModal();toast('Photo saved!');}catch(e){toast('\u26A0\uFE0F Storage full!');}}
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Compat stubs
+function rIL(){renderItemList();}
+function rCats(){openCatModal();}
+function aTab(){}
+function renderAP(){}
+
+
+// ── INIT ──────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  // Load local data first so menu shows instantly while Firebase connects
+  const local = localStorage.getItem('albasha_v3');
+  if(local){ try{ const d=JSON.parse(local); DB.cats=d.cats||DB.cats; DB.items=d.items||DB.items; DB.tr=d.tr||DB.tr; }catch(e){} }
+
+  // double tap logo → admin (no action on single tap)
+  let lastTap=0;
+  const logoEl=document.getElementById('logo-tap');
+  if(logoEl){
+    logoEl.addEventListener('touchend', e=>{
+      const now=Date.now();
+      if(now-lastTap<400){
+        openPin();
+        lastTap=0;
+      } else {
+        lastTap=now;
+      }
+    },{passive:true});
+    // mouse fallback for desktop
+    logoEl.addEventListener('dblclick', ()=>openPin());
+  }
+
+  // Start Firebase real-time listener (calls onDBReady when loaded)
+  // The Firebase module auto-starts the listener, so onDBReady will be called
+  // when data arrives. If module failed, fall back now.
+  setTimeout(()=>{
+    if(window._firstLoadFallback) onDBReady();
+  }, 4000); // fallback after 4s if Firebase never responds
+
+  // Splash swipe gesture
+  let spSx=0,spSy=0;
+  const spEl=document.getElementById('splash');
+  if(spEl){
+    spEl.addEventListener('touchstart',e=>{
+      spSx=e.touches[0].clientX;
+      spSy=e.touches[0].clientY;
+    },{passive:true});
+    spEl.addEventListener('touchend',e=>{
+      const dx=Math.abs(e.changedTouches[0].clientX-spSx);
+      const dy=Math.abs(e.changedTouches[0].clientY-spSy);
+      if(dx>30||dy>30) closeSplash();
+    },{passive:true});
+  }
+});
+
+// ── CATEGORY JUMP DRAWER ──────────────────────────
+function buildCatDrawer(){
+  const el=document.getElementById('cat-drawer');
+  const allActive=curCat===null;
+  let html=`<button class="cj-item cj-all" onclick="jumpToCat(null)">🍽 All Items</button>`;
+  DB.cats.forEach(cat=>{
+    const items=DB.items.filter(i=>i.c===cat.id);
+    if(!items.length)return;
+    const em=EMOJIS[cat.n]||'🍽';
+    const active=curCat===cat.id;
+    html+=`<button class="cj-item ${active?'active':''}" onclick="jumpToCat('${cat.id}')">${em} ${cat.n} <span style="color:var(--muted);font-size:11px;margin-left:auto;">${items.length}</span></button>`;
+  });
+  el.innerHTML=html;
+}
+function toggleCatDrawer(){
+  buildCatDrawer();
+  document.getElementById('cat-drawer').classList.toggle('open');
+}
+function jumpToCat(cid){
+  document.getElementById('cat-drawer').classList.remove('open');
+  if(cid===null){
+    goTo(0);
+  } else {
+    const firstIdx=DB.items.findIndex(i=>i.c===cid);
+    if(firstIdx>=0) goTo(firstIdx);
+  }
+}
+
+// Close drawer when tapping outside
+document.addEventListener('click',e=>{
+  const drawer=document.getElementById('cat-drawer');
+  const btn=document.getElementById('cat-jump-btn');
+  if(drawer&&btn&&!drawer.contains(e.target)&&!btn.contains(e.target)){
+    drawer.classList.remove('open');
+  }
+});
+</script>
+
+<!-- EDIT ITEM MODAL -->
+<div id="edit-modal">
+  <div id="edit-modal-panel">
+    <div class="em-header">
+      <div class="em-title">✏ Edit Item</div>
+      <button class="em-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <div id="edit-modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ── PWA SETUP ─────────────────────────────────────
+
+// 1. Inject manifest dynamically with embedded logo
+(function(){
+  const logoB64 = document.querySelector('.hlogo-img')?.src || '';
+  const manifest = {
+    name: 'Al Basha Al Mendi Restaurant',
+    short_name: 'Al Basha',
+    description: 'Digital menu for Al Basha Al Mendi Restaurant',
+    start_url: './',
+    display: 'fullscreen',
+    orientation: 'portrait',
+    background_color: '#0a0800',
+    theme_color: '#0a0800',
+    lang: 'en',
+    icons: [
+      { src: logoB64, sizes: '192x192', type: 'image/jpeg', purpose: 'any maskable' },
+      { src: logoB64, sizes: '512x512', type: 'image/jpeg', purpose: 'any maskable' }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  document.getElementById('pwa-manifest').href = url;
+})();
+
+// 2. Register Service Worker (inline via blob)
+if('serviceWorker' in navigator){
+  const swCode = `
+const CACHE = 'albasha-v1';
+const ASSETS = ['./', location.href];
+
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(cached => {
+      if(cached) return cached;
+      return fetch(e.request).then(res => {
+        if(res && res.status === 200){
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+        }
+        return res;
+      }).catch(() => cached);
+    })
+  );
+});
+`;
+  const swBlob = new Blob([swCode], {type:'application/javascript'});
+  const swUrl  = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swUrl, {scope:'./'})
+    .then(r => console.log('SW registered'))
+    .catch(e => console.log('SW error:', e));
+}
+
+// 3. Install prompt
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallBtn();
+});
+
+function showInstallBtn(){
+  const existing = document.getElementById('pwa-install-btn');
+  if(existing) return;
+  const btn = document.createElement('button');
+  btn.id = 'pwa-install-btn';
+  btn.innerHTML = '📲 Install App';
+  btn.style.cssText = `
+    position:fixed;bottom:70px;right:16px;z-index:8000;
+    background:linear-gradient(135deg,#b8860b,#f0d060);
+    color:#0a0800;border:none;border-radius:20px;
+    padding:9px 16px;font-size:12px;font-weight:700;
+    cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.5);
+    font-family:var(--font-body);
+  `;
+  btn.onclick = () => {
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      btn.remove();
+    });
+  };
+  document.body.appendChild(btn);
+}
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('pwa-install-btn')?.remove();
+  toast('✅ App installed!');
+});
+</script>
+</body>
+</html>
